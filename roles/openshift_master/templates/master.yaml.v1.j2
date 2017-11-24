@@ -103,8 +103,16 @@ kubernetesMasterConfig:
     storage-media-type:
     - application/vnd.kubernetes.protobuf
 {% endif %}
+{% if openshift_master_use_persistentlocalvolumes | bool %}
+    feature-gates:
+    - PersistentLocalVolumes=true
+{% endif %}
   controllerArguments: {{ openshift.master.controller_args | default(None) | lib_utils_to_padded_yaml( level=2 ) }}
   masterCount: {{ openshift.master.master_count }}
+{% if openshift_master_use_persistentlocalvolumes | bool %}
+    feature-gates:
+    - PersistentLocalVolumes=true
+{% endif %}
   masterIP: {{ openshift.common.ip }}
   podEvictionTimeout: {{ openshift.master.pod_eviction_timeout | default("") }}
   proxyClientInfo:
