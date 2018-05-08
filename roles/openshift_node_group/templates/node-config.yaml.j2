@@ -29,6 +29,7 @@ kubeletArguments:
 {% if openshift_node_group_use_persistentlocalvolumes | bool %}
   feature-gates:
   - PersistentLocalVolumes=true
+  - VolumeScheduling=true
 {% endif %}
 masterClientConnectionOverrides:
   acceptContentTypes: application/vnd.kubernetes.protobuf,application/json
