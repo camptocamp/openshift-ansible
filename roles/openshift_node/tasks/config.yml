@@ -7,9 +7,10 @@
 - name: Pre-pull node image
   docker_image:
     name: "{{ osn_image }}"
+    force: true
   environment:
     NO_PROXY: "{{ openshift.common.no_proxy | default('') }}"
-  when: node_image.stdout_lines == []
+  when: node_image.stdout_lines == [] or openshift_force_image_pull | default(false) | bool
   # 10 minutes to pull the image
   async: 600
   poll: 0
@@ -64,8 +65,8 @@
   register: job_result
   until: job_result.finished
   when:
-  - node_image.stdout_lines == []
-  - not openshift_is_atomic | bool
+  - node_image.stdout_lines == [] or openshift_force_image_pull | default(false) | bool
+  - not openshift_is_atomic | bool or openshift_force_image_pull | default(false) | bool
   retries: 20
   delay: 30
   failed_when: false

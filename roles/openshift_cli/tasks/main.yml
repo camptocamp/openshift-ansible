@@ -9,7 +9,8 @@
   - name: Pull CLI Image (docker)
     docker_image:
       name: "{{ openshift_cli_image }}"
-    when: not openshift_use_crio_only | bool
+      force: true
+    when: not openshift_use_crio_only | bool or openshift_force_image_pull | default(false) | bool
 
   - name: Pull CLI Image (atomic)
     command: >
